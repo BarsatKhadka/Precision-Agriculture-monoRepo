@@ -1,13 +1,14 @@
 import cv2
 import numpy as np
 import os
+from datetime import datetime
 
 # --- CONFIGURATION ---
 # 1. The Clean, Original Image
-ORIGINAL_PATH = "../ramie-disease-dataset/images/ramie_leaf_images/anthracnose_leaf_spot/1.jpg" 
+ORIGINAL_PATH = "../ramie-disease-dataset/images/ramie_leaf_images/anthracnose_leaf_spot/5.png" 
 
 # 2. The SAM Download (with the colored outlines/blobs)
-SAM_OUTPUT_PATH = "../ramie-disease-dataset/images/ramie_leaf_images/anthracnose_leaf_spot/SAM_OUTPUT/Sam_1.png"
+SAM_OUTPUT_PATH = "../ramie-disease-dataset/images/ramie_leaf_images/anthracnose_leaf_spot/SAM_OUTPUT/Sam_5.png"
 
 # 3. Output Folder
 OUTPUT_DIR = "lesion_bank"
@@ -71,9 +72,10 @@ for i, cnt in enumerate(contours):
     x, y, w, h = cv2.boundingRect(cnt)
     lesion_crop = rgba[y:y+h, x:x+w]
     
-    # Save
-    filename = f"{OUTPUT_DIR}/extracted_{count}.png"
+    # Generate time-based timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    filename = f"{OUTPUT_DIR}/extracted_{timestamp}.png"
     cv2.imwrite(filename, lesion_crop)
     count += 1
 
-print(f"✅ Success! Extracted {count} clean lesions to '{OUTPUT_DIR}'")
+print(f" Success! Extracted {count} clean lesions to '{OUTPUT_DIR}'")
